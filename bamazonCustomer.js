@@ -18,38 +18,32 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err;
   console.log("You are logged in as id " + connection.threadId + "\n");
-  // run the start function after the connection is made to prompt the user
-  initialDisplay();
+  // run the chooseProduct function after the connection is made to prompt the user
+  chooseProduct();
 });
 
 
-
-// initial start prompt
-function initialDisplay() {
-
-  connection.query("SELECT * FROM products", function (err, res) {
-    if (err) throw err;
-    console.log("Available items.......... ")
-    console.log(res)
-  });
-  // Run next function
-  chooseProduct();
-}
-
-// product selection screen
 function chooseProduct() {
 
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
     console.log("Ready to order.......... ")
+    console.log(res + "\n")
 
 
     inquirer
       .prompt([
         {
-          name: "productID",
-          type: "input",
-          message: "what is the ID of the product that you would like to buy?",
+          name: "choice",
+          type: "rawlist",
+          choices: function () {
+            var choiceArray = [];
+            for (var i = 0; i < res.length; i++) {
+              choiceArray.push(res[i].product_name);
+            }
+            return choiceArray;
+          },
+          message: "what is the ID of the product that you would like to buy?\n"
         },
         {
           name: "numUnits",
@@ -64,8 +58,37 @@ function chooseProduct() {
         }
       ])
       .then(function (answer) {
-        // if (answer.numUnits > res) { }
-        console.log(answer[i]);
+        // get the information of the chosen item
+        var chosenItem;
+        for (var i = 0; i < res.length; i++) {
+          if (res[i].product_name === answer.choice) {
+            chosenItem = res[i];
+          }
+        }
+
+        if (chosenItem.stock_quantity >= parseInt(answer.numUnits)) {
+
+          connection.query(
+            "UPDATE products SET ? WHERE ?",
+            [
+              {
+                stock_quantity: (chosenItem.stock_quantity - answer.numUnits)
+              },
+              {
+                item_id: chosenItem.item_id
+              }
+            ],
+            function (err, res) {
+              if (err) throw err;
+              console.log("\nOrder placed successfully!")
+              console.log("your total cost was $" + (chosenItem.price * answer.numUnits) + "\n")
+              connection.end();
+            }
+          );
+        } else {
+          console.log("not enough in stock, try again")
+          chooseProduct();
+        }
       })
   });
 }
