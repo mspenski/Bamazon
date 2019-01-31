@@ -28,7 +28,7 @@ function chooseProduct() {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
     console.log("Ready to order.......... ")
-    console.log(res + "\n")
+    console.log(res)
 
 
     inquirer

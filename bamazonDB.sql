@@ -21,7 +21,7 @@ CREATE TABLE products (
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES ("Toothbrush", "Home", 5.00, 200),
  ("TV", "Electronics", 450.00, 30),
- ("Jersey", "Clothing", 120.00, 60),
+ ("Jersey", "Clothing", 120.00, 3),
  ("Phone", "Electronics", 700.00, 100),
  ("Xbox", "Electronics", 350.00, 100),
  ("Speaker", "Electronics", 60.00, 150),
