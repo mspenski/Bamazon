@@ -72,7 +72,8 @@ function chooseProduct() {
             "UPDATE products SET ? WHERE ?",
             [
               {
-                stock_quantity: (chosenItem.stock_quantity - answer.numUnits)
+                stock_quantity: (chosenItem.stock_quantity - answer.numUnits),
+                product_sales: (chosenItem.price * answer.numUnits)
               },
               {
                 item_id: chosenItem.item_id
