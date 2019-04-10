@@ -40,6 +40,7 @@ function showMenu() {
 // the app should display a summarized table in the terminal window with department_id, department_name, over_head_costs, product_sales, total_profit
 //the total_profit column should not be stroed in any database, it should be created using a custom alias
 function viewSales() {
+
 }
 
 function addDepartment() {
