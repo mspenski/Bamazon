@@ -40,7 +40,13 @@ function showMenu() {
 // the app should display a summarized table in the terminal window with department_id, department_name, over_head_costs, product_sales, total_profit
 //the total_profit column should not be stroed in any database, it should be created using a custom alias
 function viewSales() {
-
+  connection.query("SELECT departments.department_id, departments.department_name, departments.over_head_costs, products.product_sales FROM departments INNER JOIN products ON departments.department_name=products.department_name",
+    function (err, res) {
+      if (err) throw err;
+      console.log(res);
+      showMenu();
+    }
+  )
 }
 
 function addDepartment() {
